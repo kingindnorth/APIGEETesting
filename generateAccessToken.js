@@ -3,8 +3,8 @@ const {restAPICall} = require("./restAPICall")
 const generateAccessToken = async()=>{
     //generate access token
     console.log("1")
-const username = ""; 
-const password = "";
+const username = "vCv3xIht7SnnloZl9QZdJAMRHbd5ARlj"; 
+const password = "En9eScqdU8iNmfE6";
 const credentials = btoa(username+ ':' + password); 
 const basicAuth = 'Basic ' + credentials; 
 const url = "https://apibankingonesandbox.icicibank.com/clientcredentials/GenerateAccessToken"

@@ -1,12 +1,14 @@
 const {axiosAPICall} = require("./axios")
 const {generateAccessToken} = require("./generateAccessToken")
-const sessionStorage = require('sessionstorage')
+const sessionStorage = require('sessionstorage');
+const { restAPICall } = require("./restAPICall");
+const { callBankAPIWithEncryption } = require("./callWithEncryption");
 
 //mdm function
 const mdmData = async()=>{
       const options = {
         headers: {
-          'apiKey':"",
+          'apiKey':"vCv3xIht7SnnloZl9QZdJAMRHbd5ARlj",
           'Authorization':''
         },
     };
@@ -20,38 +22,47 @@ const mdmData = async()=>{
   
 
         let searchPayload = {
-          "requestID": "",
-          "requesterName": "vrm",
+
+          "requestID": "10029",
+      
+          "requesterName": "",
+      
           "clientSystemName": "",
-          "requesterLanguage": "100",
+      
+          "requesterLanguage": "",
+      
           "FirstName": "",
+      
           "LastName": "",
+      
           "BirthDate": "",
+      
           "PAN": "",
+      
           "InfinityId": "",
+      
           "MobileNo": "",
+      
           "Email": "",
-          "AccountNo": "",
-          "CustId": ""
+      
+          "AccountNo": "055801564203",
+      
+          "CustId": "",
+      
+          "Ucic_Value": "",
+      
+          "Channel_Id": ""
+      
       }
-      //encryption
-      const url = ""
-      const encryptedData = await encrypt(url,searchPayload)
-      console.log("encrypted datat",encryptedData.data)
-      const payload = {
-        "requestId": "cf0e5e7f-d191-4359-911d-a4c0ab777ee4",
-        "encryptedKey": encryptedData.data.key,
-        "encryptedData": encryptedData.data.data,
-        "iv": "",
-        "service": "",
-        "clientInfo": "",
-        "optionalParam": "",
-        "oaepHashingAlgorithm": "NONE"
-    }
-//     const urlMDM = "https://apibankingonesandbox.icicibank.com/api/v1/MDM/GoldenSearch"
-//    const mdmResponse = await axiosAPICall(urlMDM,payload)
-//    console.log(mdmResponse.data)
+    const urlMDM = "https://apibankingonesandbox.icicibank.com/api/v1/MDM/GoldenSearch"
+
+   const mdmResponse = await callBankAPIWithEncryption(urlMDM,searchPayload,options)
   
+  // Accessing the IdentificationNumber
+// const identificationNumbers = mdmResponse.TCRMService.TxResponse.ResponseObject.TCRMPartyIdentificationBObj.map(
+//   identification => identification.IdentificationNumber
+// );
+   console.log("mdmResponse",JSON.parse(mdmResponse.data.data).TCRMService.TxResponse.ResponseObject.RetailCustomerDetailsBObj.RetailCustomerBObj.TCRMPersonBObj.TCRMPartyIdentificationBObj[1].IdentificationNumber)
        //Destructuring pan number from i_view Response
       //  const {PRODUCT} = tokenRes; 
       //  const panResponse = PRODUCT ? PRODUCT.ACCOUNT[0].PAN_NUMBER || PRODUCT.CARD[0].PAN_NUMBER || PRODUCT.DEMAT[0].PAN_NUMBER || PRODUCT.LOAN[0].PAN_NUMBER || PRODUCT.Others[0].PAN_NUMBER : ""
@@ -59,7 +70,9 @@ const mdmData = async()=>{
     //   const mobileResponse = tokenRes.RetailCustomerDetailsBObj.RetailCustomerBObj.TCRMPersonBObj.TCRMPartyContactMethodBObj.TCRMContactMethodBObj.ReferenceNumber
     }
 
+  
 
+//000214563286
 //encryption
 const encrypt = async(url,data)=>{
     // The data you want to send in the POST request
